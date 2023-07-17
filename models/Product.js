@@ -20,7 +20,7 @@ Product.init(
             allowNull: false,
         },
         price: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DECIMAL,
             allowNull: false,
         },
         stock: {
@@ -29,7 +29,6 @@ Product.init(
         },
         category_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: 'category',
                 key: 'id',
