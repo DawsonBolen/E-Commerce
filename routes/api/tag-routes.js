@@ -3,89 +3,25 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
-// router.get('/', async (req, res) => {
-//     // find all tags
-//     // be sure to include its associated Product data
-//     try {
-//         const tagData = await Tag.findAll({
-//             include: [{ model: Tag }, { model: Product }, { model: ProductTag }],
-//         });
-//         res.status(200).json(tagData);
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// });
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const tagData = await Tag.findAll({
-//             include: [{ model: Product }, { model: ProductTag }],
-//         });
-//         res.status(200).json(tagData);
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// });
 
-// router.get('/', (req, res) => {
-//     // find all tags
-//     // be sure to include its associated Product data
-//     Tag.findAll({
-//         include: [
-//             {
-//                 model: Product,
-//                 attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
-//             }
-//         ]
-//     })
-//         .then(dbTagData => res.json(dbTagData))
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).json(err);
-//         });
-// });
-
-router.get('/', async (req, res) => {
-    try {
-        // find all products
-        // be sure to include its associated Category and Tag data
-        const productData = await Product.findAll({
-            include: [
-                {
-                    model: Category,
-                    attributes: ['id', 'category_name'],
-                },
-                {
-                    model: Tag,
-                    attributes: ['id', 'tag_name'],
-                },
-            ],
-            attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+router.get('/', (req, res) => {
+    // find all tags
+    // be sure to include its associated Product data
+    Tag.findAll({
+        include: [
+            {
+                model: Product,
+                attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+            }
+        ]
+    })
+        .then(dbTagData => res.json(dbTagData))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
         });
-
-        res.status(200).json(productData);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
 });
-
-// router.get('/:id', async (req, res) => {
-//     // find a single tag by its `id`
-//     // be sure to include its associated Product data
-//     try {
-//         const chosenTag = await Tag.findByPk(req.params.id, {
-//             include: [{ model: Tag }, { model: Product }, { model: ProductTag }],
-//         });
-//         if (!chosenTag) {
-//             res.status(404).json({ message: 'no tag found with that id' });
-//         }
-//         res.status(200).json(chosenTag);
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// });
-
 
 router.get('/:id', async (req, res) => {
     try {
@@ -145,13 +81,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { name } = req.body;
+        const { tag_name } = req.body; // Use "tag_name" instead of "name"
         const updateTag = await Tag.update(
-            { name },
+            { tag_name }, // Use "tag_name" instead of "name"
             { where: { id } }
         );
-        if (!updateTag) {
-            res.status(404).json({ message: 'no tag found with that id' });
+        if (!updateTag[0]) { // The update method returns an array, so check updateTag[0] instead of updateTag
+            res.status(404).json({ message: 'No tag found with that id' });
         }
         res.status(200).json(updateTag);
     } catch (err) {
