@@ -106,10 +106,12 @@ router.delete('/:id', async (req, res) => {
         if (!deletedTag) {
             res.status(404).json({ message: 'no tag found with that id' });
         }
+        res.status(200).json(deletedTag);
     } catch (err) {
         res.status(400).json(err);
     }
 });
+
 
 module.exports = router;
 
